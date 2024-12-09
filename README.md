@@ -180,8 +180,8 @@ Ready to give Ellipsies a spin? Start connecting those dots today!
 ## Contributors to Ellipsies
 
 We extend our heartfelt gratitude to the following individuals for their invaluable contributions to the development and success of Ellipsies:
-•	Adam Smith: guernica0131
-•	Steve Golley: s-g-1
+* Adam Smith: guernica0131
+* Steve Golley: s-g-1
 
 Your dedication and expertise have been instrumental in shaping Ellipsies into the robust framework it is today.
 
