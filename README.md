@@ -117,7 +117,7 @@ export default class ApplicationUserController extends ModelController<Applicati
 }
 ```
 
-CRUD is now ready on your ApplicationUser model at the /appusers route. Feeling adventurous? Customize routes to your heart’s content:
+CRUD is now ready on your ApplicationUser model at the `/appusers` route. Feeling adventurous? Customize routes to your heart’s content:
 
 ```typescript
 import {
