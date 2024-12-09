@@ -10,11 +10,11 @@ By leveraging Ellipsies, developers can efficiently construct microservices that
 
 Why Ellipsies? 🤔
 
-• Express Yourself: Built on Express for that battle-tested, tried-and-true HTTP experience.
-• Decorators FTW: Because code should look beautiful while being functional.
-• Type Safe: With TypeScript at the core, you get the confidence of type safety.
-• Opinionated Yet Flexible: We guide you, but hey, you’re the boss.
-• Plug and Play: Easy-to-use connectors for your frontend apps.
+* Express Yourself: Built on Express for that battle-tested, tried-and-true HTTP experience.
+* Decorators FTW: Because code should look beautiful while being functional.
+* Type Safe: With TypeScript at the core, you get the confidence of type safety.
+* Opinionated Yet Flexible: We guide you, but hey, you’re the boss.
+* Plug and Play: Easy-to-use connectors for your frontend apps.
 
 ## Installation 🚀
 
