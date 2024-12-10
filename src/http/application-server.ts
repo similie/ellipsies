@@ -7,7 +7,7 @@ import {
 } from "routing-controllers";
 import express from "express";
 import { Container, Service } from "typedi";
-import { Logger } from "@similie/shared-microservice-utils";
+import { LogProfile } from "@similie/shared-microservice-utils";
 
 import { Server } from "http";
 import { INTERNAL_SERVICE_PORTS } from "./query-types";
@@ -16,6 +16,7 @@ export const CONTROLLER_SETUP_VALUE = "CONTROLLER_SETUP_CONTENT_NAME";
 export const INTERNAL_HTTP_PORT = "INTERNAL_HTTP_PORT_VALUE";
 export const INTERNAL_HTTP_PREFIX = "INTERNAL_HTTP_PREFIX_VALUE";
 export const INTERNAL_HTTP_SERVER_OPTIONS = "INTERNAL_HTTP_SERVER_OPTIONS";
+export const APPLICATION_SERVER_NAME = "APPLICATION_SERVER_NAME";
 
 export class ControllerSetup {
   private _serverControllers: Function[] | string[];
@@ -43,7 +44,9 @@ export class ApplicationServer {
   private _app: express.Application;
   private readonly port: number;
   private readonly prefix: string;
+  private readonly _logger: LogProfile;
   private _server: Server | undefined;
+
   public constructor() {
     useContainer(Container);
     const setup = Container.get(CONTROLLER_SETUP_VALUE) as ControllerSetup;
@@ -68,6 +71,9 @@ export class ApplicationServer {
     this._app.use(express.json()); // For JSON parsing
     this.port =
       Container.get(INTERNAL_HTTP_PORT) || INTERNAL_SERVICE_PORTS.MANAGEMENT;
+    const loggerProfileName =
+      (Container.get(APPLICATION_SERVER_NAME) as string) || "Application";
+    this._logger = new LogProfile(loggerProfileName);
   }
   /**
    * @name routePrefix
@@ -106,7 +112,7 @@ export class ApplicationServer {
     return new Promise<number>((resolve: any) => {
       // this.setBodyParser();
       this._server = this.app.listen(this.port, () => {
-        Logger.info(
+        this._logger.log.info(
           `Routing API Started on ${this.port} at ${this.routerPrefix} `,
         );
 

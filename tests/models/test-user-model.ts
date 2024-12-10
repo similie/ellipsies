@@ -7,8 +7,9 @@ import {
   JoinColumn,
   ManyToOne,
   BeforeInsert,
-} from "../../../postgres";
-import { EllipsiesBaseModelID, EllipsiesBaseModel } from "../../index";
+  EllipsiesBaseModelID,
+  EllipsiesBaseModel,
+} from "../../index";
 import { apiToken } from "@similie/shared-microservice-utils";
 import { PassportModel, type IPassport } from "./test-passport-model";
 import { IModelCollection, IModelType } from "@similie/model-connect-entities";

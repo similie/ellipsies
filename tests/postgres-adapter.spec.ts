@@ -1,4 +1,4 @@
-import { PostgresHostManager } from "../../postgres";
+import { PostgresHostManager } from "../index";
 import { Container } from "typedi";
 import {
   testDataSourceCredentials,

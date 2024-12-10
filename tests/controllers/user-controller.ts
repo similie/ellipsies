@@ -4,17 +4,12 @@ import {
   ExpressResponse,
   ExpressNext,
   QueryAgent,
-} from "../../index";
-import {
   Get,
   UseBefore,
-  // UseBefore
-} from "routing-controllers";
+  EllipsiesExtends,
+  DeepPartial,
+} from "../../index";
 
-// import { UserRequiredMiddleware } from '@similie/router-middleware-agents';
-// import { UserRolesV1 } from '@similie/user-agent';
-import { EllipsiesExtends } from "../../dynamic-routes";
-import { DeepPartial } from "typeorm";
 import { UserModel } from "../test-models";
 
 export const MIN_USER_ROLE = 5;

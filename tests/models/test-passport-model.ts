@@ -1,7 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable object-curly-spacing */
-import { Column, ManyToOne, Entity, JoinColumn } from "../../../postgres";
-import { EllipsiesBaseModelID, EllipsiesBaseModel } from "../../index";
+
+import {
+  EllipsiesBaseModelID,
+  EllipsiesBaseModel,
+  Column,
+  ManyToOne,
+  Entity,
+  JoinColumn,
+} from "../../index";
 import { hashPassword } from "@similie/shared-microservice-utils";
 import { Exclude } from "class-transformer";
 import { UserModel, type IUser } from "./test-user-model";

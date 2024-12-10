@@ -4,6 +4,7 @@ import {
   ApplicationServer,
   CONTROLLER_SETUP_VALUE,
   INTERNAL_HTTP_PORT,
+  APPLICATION_SERVER_NAME,
   INTERNAL_HTTP_PREFIX,
   ControllerSetup,
 } from "./index";
@@ -22,6 +23,7 @@ export interface ServerConfig {
   prefix?: string;
   controllers: Entities;
   models: Entities;
+  middleware?: Function[] | string[];
 }
 
 export class Ellipsies {
@@ -30,11 +32,13 @@ export class Ellipsies {
   public constructor(private config: ServerConfig) {
     const setup = new ControllerSetup(
       Ellipsies.toFunctions(this.config.controllers),
+      this.config.middleware,
       // this.config.controllers as unknown as Function[],
     );
     Container.set(INTERNAL_HTTP_PORT, this.config.port || DEFAULT_SERVICE_PORT);
     Container.set(INTERNAL_HTTP_PREFIX, this.config.prefix || "");
     Container.set(CONTROLLER_SETUP_VALUE, setup);
+    Container.set(APPLICATION_SERVER_NAME, "EllipsiesApplicationServer");
     this._server = Container.get(ApplicationServer);
     this._postgresManager = Container.get(PostgresHostManager);
   }

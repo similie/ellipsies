@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, Index, PrimaryGeneratedColumn } from "../../index";
 
 @Index("variable_pkey", ["id"], { unique: true })
 @Entity("variable", { schema: "public" })

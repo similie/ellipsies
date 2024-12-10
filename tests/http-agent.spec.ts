@@ -12,11 +12,8 @@ import {
   IPassport,
 } from "./test-models";
 
-import { Ellipsies } from "../ellipsies";
-import {
-  testDataSourceCredentials,
-  defaultTestDataSourceOpt,
-} from "@similie/pg-microservice-datasource";
+import { Ellipsies } from "../index";
+import { testDataSourceCredentials } from "@similie/pg-microservice-datasource";
 import { UserController, PassportController } from "./controllers";
 
 const COMMON_API_SERVICE_ROUTES = "/service/api/v2/";
@@ -50,14 +47,17 @@ describe("HTTP Agent Generic Controller CRUD", () => {
         prefix: COMMON_API_SERVICE_ROUTES,
       });
       await ellipsies.setDataSource(testDataSourceCredentials(), {
-        ...defaultTestDataSourceOpt(),
+        // ...defaultTestDataSourceOpt(),
         dropSchema: true,
         migrationsRun: false,
+        synchronize: true,
       });
       await ellipsies.start();
 
       await sendSeeds(ellipsies.pgManager);
       server = ellipsies;
+      // not needed when running in as a individual test
+      await ellipsies.pgManager.datasource.synchronize(); // this is required when running in full test mode
     });
 
     it("should find two users", async () => {
