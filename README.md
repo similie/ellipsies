@@ -79,14 +79,14 @@ Your data deserves the best representation. Here’s how to create a model:
 
 ```typescript
 import {
-  EllipsiesBaseModelUUID,
   Entity,
   Index,
   Column,
+  EllipsiesBaseModelUUID,
 } from '@similie/ellipsies';
 
 @Entity('user', { schema: 'public' })
-export default class ApplicationUser extends EllipsiesBaseModelUUID {
+export default class User extends EllipsiesBaseModelUUID {
   @Column('text', { name: 'username', unique: true })
   public userName: string;
 
@@ -107,29 +107,31 @@ Controllers are where the action happens. Define your routes like a pro:
 
 ```typescript
 import { EllipsiesController, EllipsiesExtends } from '@similie/ellipsies';
-import { ApplicationUser } from '../models';
+import { User } from '../models';
 
-@EllipsiesExtends('appusers')
-export default class ApplicationUserController extends EllipsiesController<ApplicationUser> {
+@EllipsiesExtends('users')
+export default class UserController extends EllipsiesController<User> {
   public constructor() {
-    super(ApplicationUser);
+    super(User);
   }
 }
 ```
 
-CRUD is now ready on your ApplicationUser model at the `/appusers` route. Feeling adventurous? Customize routes to your heart’s content:
+CRUD is now ready on your ApplicationUser model at the `/users` route. Feeling adventurous? Customize routes to your heart’s content:
 
 ```typescript
 import {
-  EllipsiesController,
-  ExtendedModelController,
   Get,
   UseBefore,
   QueryAgent,
+  ExpressRequest,
+  EllipsiesController,
+  ExtendedModelController,
 } from '@similie/http-agent';
+import { User } from '../models';
 
-@ExtendedModelController('appusers')
-export default class ApplicationUserController extends EllipsiesController<ApplicationUser> {
+@ExtendedModelController('users')
+export default class UserController extends EllipsiesController<User> {
   /**
    * Create a custom route
    */
@@ -140,11 +142,11 @@ export default class ApplicationUserController extends EllipsiesController<Appli
   /**
    * @description Override defaults to validate query and get objects
    * @param {ExpressRequest} req
-   * @returns {Promise<ApplicationUser[]>}
+   * @returns {Promise<User[]>}
    */
-  public override async find(req: ExpressRequest): Promise<ApplicationUser[]> {
-    const query = await QueryAgent.validateQuery<ApplicationUser>(req);
-    const agent = new QueryAgent<ApplicationUser>(ApplicationUser, query);
+  public override async find(req: ExpressRequest): Promise<User[]> {
+    const query = await QueryAgent.validateQuery<User>(req);
+    const agent = new QueryAgent<User>(User, query);
     return agent.getObjects();
   }
 }
