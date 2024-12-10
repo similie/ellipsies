@@ -126,7 +126,7 @@ import {
   QueryAgent,
   ExpressRequest,
   EllipsiesController,
-  ExtendedModelController,
+  EllipsiesExtends,
 } from '@similie/http-agent';
 import { User } from '../models';
 
