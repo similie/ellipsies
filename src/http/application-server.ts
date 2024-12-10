@@ -66,9 +66,6 @@ export class ApplicationServer {
     // Apply URL-encoded parser as middleware
     this._app.use(express.urlencoded({ extended: true }));
     this._app.use(express.json()); // For JSON parsing
-
-    console.log("PREFIX", this.prefix);
-
     this.port =
       Container.get(INTERNAL_HTTP_PORT) || INTERNAL_SERVICE_PORTS.MANAGEMENT;
   }
@@ -105,7 +102,6 @@ export class ApplicationServer {
    * @returns {Promise<number>}
    */
   public start() {
-    console.log("STARTING SERVER", this.port);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return new Promise<number>((resolve: any) => {
       // this.setBodyParser();
