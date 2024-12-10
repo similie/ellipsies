@@ -130,7 +130,7 @@ import {
 } from '@similie/http-agent';
 import { User } from '../models';
 
-@ExtendedModelController('users')
+@EllipsiesExtends('users')
 export default class UserController extends EllipsiesController<User> {
   /**
    * Create a custom route
