@@ -60,10 +60,10 @@ export enum ControllerFunctionNames {
 
 /**
  * @abstract
- * @name EllipsiesModelController
+ * @name EllipsiesController
  * @description an abstract class for handling generic model actions
  */
-export abstract class EllipsiesModelController<t extends IModelValues>
+export abstract class EllipsiesController<t extends IModelValues>
   implements IModelController<t>
 {
   private logger: LogProfile;

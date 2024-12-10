@@ -3,7 +3,7 @@
 import {
   ControllerFunctionNames,
   ControllerRoutes,
-  EllipsiesModelController,
+  EllipsiesController,
 } from "./http-agent";
 import { IModelValues } from "./query-types";
 import {
@@ -28,9 +28,9 @@ import { Service } from "typedi";
  * @returns {Function}
  */
 export const EllipsiesExtends = <T extends IModelValues>(path: string) => {
-  return function <
-    U extends new (...args: any[]) => EllipsiesModelController<T>,
-  >(constructor: U) {
+  return function <U extends new (...args: any[]) => EllipsiesController<T>>(
+    constructor: U,
+  ) {
     Service()(constructor);
     JsonController(path)(constructor);
     const route = new DynamicRoutes<T>(constructor);
@@ -57,7 +57,7 @@ type RouteContent = {
  *  model
  */
 class DynamicRoutes<T extends IModelValues> {
-  private parentClass: new (...args: any[]) => EllipsiesModelController<T>;
+  private parentClass: new (...args: any[]) => EllipsiesController<T>;
   /**
    * RouteContent array containing the prototype details
    */
@@ -201,13 +201,11 @@ class DynamicRoutes<T extends IModelValues> {
    * @param {function(...args: any[]):ModelController<T>} routeConstructor
    */
   public constructor(
-    private routeConstructor: new (
-      ...args: any[]
-    ) => EllipsiesModelController<T>,
+    private routeConstructor: new (...args: any[]) => EllipsiesController<T>,
   ) {
     this.parentClass = Object.getPrototypeOf(routeConstructor) as new (
       ...args: any[]
-    ) => EllipsiesModelController<T>;
+    ) => EllipsiesController<T>;
   }
 
   private get routes() {

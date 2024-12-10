@@ -1,5 +1,5 @@
 import {
-  EllipsiesModelController,
+  EllipsiesController,
   ExpressRequest,
   ExpressResponse,
   ExpressNext,
@@ -20,7 +20,7 @@ import { UserModel } from "../test-models";
 export const MIN_USER_ROLE = 5;
 
 @EllipsiesExtends("users")
-export class UserController extends EllipsiesModelController<UserModel> {
+export class UserController extends EllipsiesController<UserModel> {
   public constructor() {
     super(UserModel);
   }
