@@ -20,11 +20,9 @@ Why Ellipsies? 🤔
 
 Install Ellipsies via npm or yarn:
 
-npm install @similie/http-agent typeorm reflect-metadata
-
-Don’t forget the peer dependencies:
-
-npm install express class-validator class-transformer
+```bash
+npm install --save @similie/ellipsies
+```
 
 ## Quickstart ⚡
 
