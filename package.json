@@ -33,6 +33,8 @@
   },
   "homepage": "https://github.com/similie/ellipsies#readme",
   "devDependencies": {
+    "@similie/http-connector": "^0.0.17",
+    "class-transformer": "^0.5.1",
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.10.1",
@@ -43,11 +45,9 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
-    "@similie/http-connector": "^0.0.17",
     "@similie/model-connect-entities": "^1.1.4",
     "@similie/pg-microservice-datasource": "^0.0.8",
     "@similie/shared-microservice-utils": "^1.1.3",
-    "class-transformer": "^0.5.1",
     "cors": "^2.8.5",
     "express": "^4.21.2",
     "pg-query-stream": "^4.7.1",
