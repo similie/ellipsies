@@ -106,11 +106,11 @@ We leverage [TypeORM](https://typeorm.io/) for robust database interaction. Dive
 Controllers are where the action happens. Define your routes like a pro:
 
 ```typescript
-import { ModelController, EllipsiesExtends } from '@similie/ellipsies';
+import { EllipsiesController, EllipsiesExtends } from '@similie/ellipsies';
 import { ApplicationUser } from '../models';
 
 @EllipsiesExtends('appusers')
-export default class ApplicationUserController extends ModelController<ApplicationUser> {
+export default class ApplicationUserController extends EllipsiesController<ApplicationUser> {
   public constructor() {
     super(ApplicationUser);
   }
@@ -121,7 +121,7 @@ CRUD is now ready on your ApplicationUser model at the `/appusers` route. Feelin
 
 ```typescript
 import {
-  ModelController,
+  EllipsiesController,
   ExtendedModelController,
   Get,
   UseBefore,
@@ -129,7 +129,7 @@ import {
 } from '@similie/http-agent';
 
 @ExtendedModelController('appusers')
-export default class ApplicationUserController extends ModelController<ApplicationUser> {
+export default class ApplicationUserController extends EllipsiesController<ApplicationUser> {
   /**
    * Create a custom route
    */
