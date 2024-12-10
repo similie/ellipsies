@@ -29,8 +29,8 @@ export class Ellipsies {
   private _postgresManager: PostgresHostManager;
   public constructor(private config: ServerConfig) {
     const setup = new ControllerSetup(
-      // Ellipsies.toFunctions(this.config.controllers)
-      this.config.controllers as unknown as Function[],
+      Ellipsies.toFunctions(this.config.controllers),
+      // this.config.controllers as unknown as Function[],
     );
     Container.set(INTERNAL_HTTP_PORT, this.config.port || DEFAULT_SERVICE_PORT);
     Container.set(INTERNAL_HTTP_PREFIX, this.config.prefix || "");
@@ -67,23 +67,6 @@ export class Ellipsies {
         : (entity as Function);
     });
   }
-  // /**
-  //  * @name getDefaults
-  //  * @description gets the default functions from a path
-  //  * @param {string} path - the path
-  //  * @param {string} filter  - search filter, default ''
-  //  * @returns {Promise<Function[]>}
-  //  */
-  // public async getDefaults(
-  //   path: string,
-  //   filter: string = "",
-  // ): Promise<Function[]> {
-  //   const entityList = await includeAll({
-  //     dirname: path,
-  //     filter: filter, // /(.+model)\.(js|ts)$/,
-  //   });
-  //   return Ellipsies.toFunctions(entityList);
-  // }
 
   public get server() {
     return this._server;
@@ -92,11 +75,19 @@ export class Ellipsies {
   public async start() {
     return this.server.start();
   }
-
+  /**
+   * @name close
+   *  @description closes the server
+   * @returns {Promse<void>}
+   */
   public async close() {
     return this.server.close();
   }
-
+  /**
+   * @name shutdown
+   *  @description closes the server and database connection
+   * @returns {Promse<void>}
+   */
   public async shutdown() {
     this.server.close();
     await this.pgManager.destroy();
