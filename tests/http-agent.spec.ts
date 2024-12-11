@@ -53,11 +53,12 @@ describe("HTTP Agent Generic Controller CRUD", () => {
         synchronize: true,
       });
       await ellipsies.start();
+      await ellipsies.pgManager.datasource.dropDatabase(); // careful, DO NOT USE IN PRODUCTION
+      await ellipsies.pgManager.datasource.synchronize(); // this is required when running in full test mode
 
       await sendSeeds(ellipsies.pgManager);
       server = ellipsies;
       // not needed when running in as a individual test
-      await ellipsies.pgManager.datasource.synchronize(); // this is required when running in full test mode
     });
 
     it("should find two users", async () => {
