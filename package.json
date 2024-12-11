@@ -1,6 +1,6 @@
 {
   "name": "@similie/ellipsies",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Automatic CRUD API for your Postgres data models",
   "main": "./dist/index.js",
   "files": [
