@@ -654,8 +654,8 @@ export class QueryAgent<t extends IModelValues> {
   public findOneBy(where: FindOptionsWhere<t>): Promise<t | null> {
     return this.dataSource
       .getRepository<t>(this.target)
-      .findOneBy({
-        ...where,
+      .findOne({
+        where,
         relations: this.populate,
       })
       .then((values: t | null) => {
