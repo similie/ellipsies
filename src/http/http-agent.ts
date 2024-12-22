@@ -115,7 +115,7 @@ export abstract class EllipsiesController<t extends IModelValues>
    * @description finds on object based on the id
    * @param {number} id
    * @param {populateType} populate
-   * @returns {Promise<IModelValues | undefined>}
+   * @returns {Promise<IModelValues | null>}
    */
   public async findOne(
     id: number,

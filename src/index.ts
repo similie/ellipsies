@@ -1,5 +1,7 @@
-export * from './http';
-export * from './postgres';
+export * from "./http";
+export * from "./postgres";
+
+export * as RC from "routing-controllers";
 
 export {
   Controller,
@@ -49,4 +51,12 @@ export {
   OnUndefined,
   ResponseClassTransformOptions,
   Render,
-} from 'routing-controllers';
+  HttpError,
+  BadRequestError,
+  InternalServerError,
+  NotFoundError,
+  ForbiddenError,
+  UnauthorizedError,
+  MethodNotAllowedError,
+  NotAcceptableError,
+} from "routing-controllers";
