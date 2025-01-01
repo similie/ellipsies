@@ -716,6 +716,9 @@ export class QueryAgent<t extends IModelValues> {
       throw new Error("Object not found");
     }
     const stripped = this.compareChanges(values, compare);
+    if (!Object.keys(stripped).length) {
+      throw new Error("No changes to update");
+    }
     await this.dataSource
       .getRepository<t>(this.target)
       .update(id as IDValue, stripped);

@@ -25,15 +25,16 @@ import {
   IModelSeekValues,
   IModelUpdateValues,
 } from "@similie/model-connect-entities";
-
+const UUID_ENUM =
+  "\\d+|[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}";
 export enum ControllerRoutes {
   ROOT = "/",
-  ID = "/:id(\\d+)",
+  ID = `/:id(${UUID_ENUM})`,
   SCHEMA = "/schema",
   SUM = "/sum/:attr",
   AVG = "/avg/:attr",
   COUNT = "/count",
-  POPULATE = "/:id(\\d+)/:attr/:value(\\d+)",
+  POPULATE = `/:id(${UUID_ENUM})/:attr/:value(${UUID_ENUM})`,
   STREAM = "/stream",
   STREAM_BATCH = "/stream-batch/:limiter",
   SEEK = "/seek",
