@@ -24,17 +24,18 @@ import {
 import {
   IModelSeekValues,
   IModelUpdateValues,
+  UUID,
 } from "@similie/model-connect-entities";
 const UUID_ENUM =
   "\\d+|[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}";
 export enum ControllerRoutes {
   ROOT = "/",
-  ID = `/:id(${UUID_ENUM})`,
+  ID = `/:id(\\d+|[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12})`,
   SCHEMA = "/schema",
   SUM = "/sum/:attr",
   AVG = "/avg/:attr",
   COUNT = "/count",
-  POPULATE = `/:id(${UUID_ENUM})/:attr/:value(${UUID_ENUM})`,
+  POPULATE = `/:id(\\d+|[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12})/:attr/:value(\\d+|[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12})`,
   STREAM = "/stream",
   STREAM_BATCH = "/stream-batch/:limiter",
   SEEK = "/seek",
@@ -57,6 +58,7 @@ export enum ControllerFunctionNames {
   COUNT = "count",
   SEEK = "seek",
   SCHEMA = "attr",
+  ALL = "*",
 }
 
 /**
@@ -119,7 +121,7 @@ export abstract class EllipsiesController<t extends IModelValues>
    * @returns {Promise<IModelValues | null>}
    */
   public async findOne(
-    id: number,
+    id: number | UUID,
     populate: populateType = {},
   ): Promise<t | null> {
     try {

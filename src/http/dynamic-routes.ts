@@ -27,7 +27,9 @@ import { Service } from "typedi";
  * @param {string} path
  * @returns {Function}
  */
-export const EllipsiesExtends = <T extends IModelValues>(path: string) => {
+export const EllipsiesExtends = <T extends IModelValues>(
+  path: string,
+): Function => {
   return function <U extends new (...args: any[]) => EllipsiesController<T>>(
     constructor: U,
   ) {
@@ -45,7 +47,7 @@ type attributesDetails = {
 
 type RouteContent = {
   attributes: attributesDetails[];
-  path: string;
+  path: string | ControllerRoutes;
   decorator: Function;
   name: string;
 };

@@ -6,16 +6,16 @@ import {
   BaseEntity,
   BeforeInsert,
   BeforeUpdate,
-} from '@similie/pg-microservice-datasource';
-import { EllipsiesBaseModel, UUID } from './query-types';
+} from "@similie/pg-microservice-datasource";
+import { EllipsiesBaseModel, UUID } from "./query-types";
 
-abstract class EllipsiesDateModel extends BaseEntity {
+export abstract class EllipsiesDateModel extends BaseEntity {
   @CreateDateColumn()
-  @Column('timestamp with time zone', { name: 'created_at' })
+  @Column("timestamp with time zone", { name: "created_at" })
   public createdAt: Date;
 
   @UpdateDateColumn()
-  @Column('timestamp with time zone', { name: 'updated_at' })
+  @Column("timestamp with time zone", { name: "updated_at" })
   public updatedAt: Date;
 
   @BeforeInsert()
@@ -34,7 +34,7 @@ export abstract class EllipsiesBaseModelID
   extends EllipsiesDateModel
   implements EllipsiesBaseModel
 {
-  @PrimaryGeneratedColumn({ type: 'integer', name: 'id' })
+  @PrimaryGeneratedColumn({ type: "integer", name: "id" })
   public id: number;
 }
 
@@ -42,6 +42,6 @@ export abstract class EllipsiesBaseModelUUID
   extends EllipsiesDateModel
   implements EllipsiesBaseModel
 {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn("uuid")
   public id: UUID;
 }

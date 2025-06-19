@@ -28,11 +28,7 @@ export class ActivePgDataSource {
   public async create(
     entities: Entities,
     config: IDataSourceCredentials,
-    optionsOverride: OverrideOptions = {
-      synchronize: process.env["NODE_ENV"] !== "production",
-      migrationsRun: false,
-      dropSchema: process.env["NODE_ENV"] === "test",
-    },
+    optionsOverride: OverrideOptions = {},
   ) {
     this._credentials = new DataSourceCredentials(entities, config);
     const options = {
