@@ -26,8 +26,8 @@ import {
   IModelUpdateValues,
   UUID,
 } from "@similie/model-connect-entities";
-const UUID_ENUM =
-  "\\d+|[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}";
+// const UUID_ENUM =
+//   "\\d+|[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}";
 export enum ControllerRoutes {
   ROOT = "/",
   ID = `/:id(\\d+|[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12})`,
@@ -71,7 +71,10 @@ export abstract class EllipsiesController<t extends IModelValues>
 {
   private logger: LogProfile;
   private meta: EntityMetadata;
-  public constructor(private _target: EntityTarget<t>) {
+  public constructor(
+    private _target: EntityTarget<t>,
+    private _whitelist?: ControllerFunctionNames[],
+  ) {
     this.applyAttributes();
   }
   /**
@@ -97,6 +100,18 @@ export abstract class EllipsiesController<t extends IModelValues>
     this._target = target;
     this.applyAttributes();
   }
+
+  private checkWhitelist(func: ControllerFunctionNames) {
+    if (
+      this._whitelist &&
+      !this._whitelist.includes(func) &&
+      !this._whitelist.includes(ControllerFunctionNames.ALL)
+    ) {
+      throw new InternalServerError(
+        `Function '${func}' is not allowed on this controller.`,
+      );
+    }
+  }
   /**
    * @name find
    * @description finds the objects based on query attributes
@@ -105,6 +120,7 @@ export abstract class EllipsiesController<t extends IModelValues>
    */
   public async find(req: ExpressRequest): Promise<t[]> {
     try {
+      this.checkWhitelist(ControllerFunctionNames.FIND);
       const query = await QueryAgent.validateQuery<t>(req);
       const agent = new QueryAgent<t>(this.target, query);
       return agent.getObjects() as Promise<t[]>;
@@ -125,6 +141,7 @@ export abstract class EllipsiesController<t extends IModelValues>
     populate: populateType = {},
   ): Promise<t | null> {
     try {
+      this.checkWhitelist(ControllerFunctionNames.FIND_ONE);
       const params = new RequestQueryParams<t>({ populate });
       const agent = new QueryAgent<t>(this.target, params.toObject());
       return agent.findOneById(id) as Promise<t | null>;
@@ -141,6 +158,7 @@ export abstract class EllipsiesController<t extends IModelValues>
    */
   public async create(body: DeepPartial<t | t[]>): Promise<t | t[]> {
     try {
+      this.checkWhitelist(ControllerFunctionNames.CREATE);
       const agent = new QueryAgent<t>(this.target, {});
       return agent.create(body) as Promise<t | t[]>;
     } catch (error: any) {
@@ -157,6 +175,7 @@ export abstract class EllipsiesController<t extends IModelValues>
    */
   public async update(body: IModelUpdateValues<t>): Promise<t | t[]> {
     try {
+      this.checkWhitelist(ControllerFunctionNames.UPDATE);
       const agent = new QueryAgent<t>(this.target, {
         where: body.query as FindOptionsWhere<t>,
       });
@@ -176,6 +195,7 @@ export abstract class EllipsiesController<t extends IModelValues>
    */
   public async updateOne(id: number, body: Partial<t>): Promise<t | null> {
     try {
+      this.checkWhitelist(ControllerFunctionNames.UPDATE_ONE);
       const agent = new QueryAgent<t>(this.target, { where: { id } });
       return agent.updateById(body as any);
     } catch (error: any) {
@@ -191,6 +211,7 @@ export abstract class EllipsiesController<t extends IModelValues>
    */
   public async destroy(body: FindOptionsWhere<t>): Promise<t | t[]> {
     try {
+      this.checkWhitelist(ControllerFunctionNames.DESTROY);
       const agent = new QueryAgent<t>(this.target, { where: body });
       return agent.destroyAll();
     } catch (error: any) {
@@ -204,8 +225,9 @@ export abstract class EllipsiesController<t extends IModelValues>
    * @param {number} id
    * @returns {Promise<IModelValues | null>}
    */
-  public async destroyOne(id: number): Promise<t | null> {
+  public async destroyOne(id: number | UUID): Promise<t | null> {
     try {
+      this.checkWhitelist(ControllerFunctionNames.DESTROY_ONE);
       const agent = new QueryAgent<t>(this.target, { where: { id } });
       return agent.destroyById() as Promise<t | null>;
     } catch (error: any) {
@@ -220,6 +242,7 @@ export abstract class EllipsiesController<t extends IModelValues>
    */
   public async attr() {
     try {
+      this.checkWhitelist(ControllerFunctionNames.SCHEMA);
       const agent = new QueryAgent<t>(this.target, {});
       return agent.attr();
     } catch (error: any) {
@@ -236,6 +259,7 @@ export abstract class EllipsiesController<t extends IModelValues>
    */
   public async sum(attr: string, req: ExpressRequest) {
     try {
+      this.checkWhitelist(ControllerFunctionNames.SUM);
       const query = await QueryAgent.validateQuery<t>(req);
       const agent = new QueryAgent<t>(this.target, query);
       return agent.sum(attr);
@@ -253,6 +277,7 @@ export abstract class EllipsiesController<t extends IModelValues>
    */
   public async avg(attr: string, req: ExpressRequest) {
     try {
+      this.checkWhitelist(ControllerFunctionNames.AVG);
       const query = await QueryAgent.validateQuery<t>(req);
       const agent = new QueryAgent<t>(this.target, query);
       return agent.avg(attr);
@@ -271,6 +296,7 @@ export abstract class EllipsiesController<t extends IModelValues>
    */
   public populate(identity: number, value: number, attr: string) {
     try {
+      this.checkWhitelist(ControllerFunctionNames.POPULATE);
       const agent = new QueryAgent<t>(this.target, {
         where: { id: identity },
         populate: [attr],
@@ -291,6 +317,7 @@ export abstract class EllipsiesController<t extends IModelValues>
    */
   public async depopulate(identity: number, value: number, attr: string) {
     try {
+      this.checkWhitelist(ControllerFunctionNames.DEPOPULATE);
       const agent = new QueryAgent<t>(this.target, {
         where: { id: identity },
         populate: [attr],
@@ -310,6 +337,7 @@ export abstract class EllipsiesController<t extends IModelValues>
    */
   public async stream(req: ExpressRequest, res: ExpressResponse) {
     try {
+      this.checkWhitelist(ControllerFunctionNames.STREAM);
       const query = await QueryAgent.validateQuery<t>(req);
       const agent = new QueryAgent<t>(this.target, query);
       agent.setStreamHeaders(res);
@@ -336,6 +364,7 @@ export abstract class EllipsiesController<t extends IModelValues>
     res: ExpressResponse,
   ) {
     try {
+      this.checkWhitelist(ControllerFunctionNames.STREAM_BATCH);
       const query = await QueryAgent.validateQuery<t>(req);
       const agent = new QueryAgent<t>(this.target, query);
       agent.setStreamHeaders(res);
@@ -355,6 +384,7 @@ export abstract class EllipsiesController<t extends IModelValues>
    */
   public async count(req: ExpressRequest) {
     try {
+      this.checkWhitelist(ControllerFunctionNames.COUNT);
       const query = await QueryAgent.validateQuery<t>(req);
       const agent = new QueryAgent<t>(this.target, query);
       return agent.count();
@@ -371,6 +401,7 @@ export abstract class EllipsiesController<t extends IModelValues>
    */
   public async seek(body: IModelSeekValues<t>) {
     try {
+      this.checkWhitelist(ControllerFunctionNames.SEEK);
       const agent = new QueryAgent<t>(this.target, {});
       return agent.seek(body);
     } catch (error: any) {

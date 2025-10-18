@@ -60,3 +60,4 @@ export {
   MethodNotAllowedError,
   NotAcceptableError,
 } from "routing-controllers";
+export { Service, Container } from "typedi";

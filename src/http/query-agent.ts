@@ -46,6 +46,8 @@ import {
   ColumnMetadata,
   RelationMetadata,
   QueryDeepPartialEntity,
+  FindOperator,
+  Or,
 } from "../postgres";
 
 @Service({ transient: true })
@@ -105,7 +107,7 @@ export class QueryAgent<t extends IModelValues> {
    * @param {string} key
    * @returns {any}
    */
-  private checkObjectKeys(value: any, key: string) {
+  private checkObjectKeys(value: any, key: string): FindOperator<any> | any {
     if (key === "contains" && typeof value === "string") {
       return ILike(`%${value}%`);
     } else if (key === "startsWith" && typeof value === "string") {
@@ -124,6 +126,16 @@ export class QueryAgent<t extends IModelValues> {
       const from = Array.isArray(value) ? value[0] : value.from;
       const to = Array.isArray(value) ? value[1] : value.to;
       return Between(from, to);
+    } else if (key === "or" && Array.isArray(value)) {
+      const inQ: FindOperator<any>[] = [];
+      for (const val of value) {
+        const keys = val ? Object.keys(val) : [];
+        for (const k of keys) {
+          inQ.push(this.checkObjectKeys(val[k], k as string));
+        }
+      }
+
+      return Or(...inQ);
     }
     return value;
   }

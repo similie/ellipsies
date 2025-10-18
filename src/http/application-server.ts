@@ -4,13 +4,15 @@ import {
   RoutingControllersOptions,
   createExpressServer,
   useContainer,
+  useExpressServer,
 } from "routing-controllers";
 import express from "express";
 import { Container, Service } from "typedi";
 import { LogProfile } from "@similie/shared-microservice-utils";
-
+import cors from "cors";
 import { Server } from "http";
 import { INTERNAL_SERVICE_PORTS } from "./query-types";
+import { Readable } from "stream";
 
 export const CONTROLLER_SETUP_VALUE = "CONTROLLER_SETUP_CONTENT_NAME";
 export const INTERNAL_HTTP_PORT = "INTERNAL_HTTP_PORT_VALUE";
@@ -21,13 +23,15 @@ export const APPLICATION_SERVER_NAME = "APPLICATION_SERVER_NAME";
 export class ControllerSetup {
   private _serverControllers: Function[] | string[];
   private _serverMiddleware: Function[] | string[];
-
+  private _cors: boolean | Record<string, string>;
   public constructor(
     serverControllers: Function[] | string[],
     serverMiddleware?: Function[] | string[],
+    cors: boolean | Record<string, string> = false,
   ) {
     this._serverControllers = serverControllers || [];
     this._serverMiddleware = serverMiddleware || [];
+    this._cors = cors;
   }
 
   public get controllers() {
@@ -36,6 +40,10 @@ export class ControllerSetup {
 
   public get middleware(): Function[] | string[] {
     return this._serverMiddleware;
+  }
+
+  public get cors(): boolean | Record<string, string> {
+    return this._cors;
   }
 }
 
@@ -56,19 +64,48 @@ export class ApplicationServer {
         ? Container.get(INTERNAL_HTTP_SERVER_OPTIONS)
         : {}
     ) as RoutingControllersOptions;
-
-    this._app = createExpressServer({
-      // classTransformer: true,
-      controllers: setup.controllers,
-      cors: true,
-      middlewares: setup.middleware,
-      routePrefix: this.prefix,
-      ...options,
-    });
-
+    this._app = express();
+    if (setup.cors) {
+      this._app.use(
+        typeof setup.cors === "object" ? cors(setup.cors as any) : cors(),
+      );
+    }
     // Apply URL-encoded parser as middleware
     this._app.use(express.urlencoded({ extended: true }));
     this._app.use(express.json()); // For JSON parsing
+    // 3) If you pass plain Express middlewares, register them here
+    for (const mw of setup.middleware || []) {
+      // Heuristic: plain function -> treat as Express middleware
+      if (
+        typeof mw === "function" &&
+        !("prototype" in mw && (mw as any).prototype?.use)
+      ) {
+        this._app.use(mw as express.RequestHandler);
+      }
+    }
+
+    useExpressServer(this._app, {
+      controllers: setup.controllers,
+      // bodyParser: false as any,
+      // If you have RC middlewares decorated with @Middleware({ type: 'before'|'after' })
+      // pass the CLASS references here, e.g. [AuthMiddleware, ErrorFormatterMiddleware]
+      // You can filter them out of 'setup.middleware' like shown above, or keep a separate list.
+      middlewares: (setup.middleware || []).filter((mw) => {
+        return (
+          typeof mw === "function" &&
+          "prototype" in mw &&
+          (mw as any).prototype?.use
+        );
+      }) as Function[],
+
+      routePrefix: this.prefix,
+      // You may also keep RC-managed CORS if you prefer; remove the app.use(cors) above in that case.
+      // cors: setup.cors,
+      // other routing-controllers options...
+      defaultErrorHandler: true,
+      ...options,
+    }); // 5) Strip any RC-added body parsers to prevent double-parse
+
     this.port =
       Container.get(INTERNAL_HTTP_PORT) || INTERNAL_SERVICE_PORTS.MANAGEMENT;
     const loggerProfileName =

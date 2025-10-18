@@ -24,6 +24,7 @@ export interface ServerConfig {
   controllers: Entities;
   models: Entities;
   middleware?: Function[] | string[];
+  cors?: boolean | Record<string, string>;
 }
 
 export class Ellipsies {
@@ -33,6 +34,7 @@ export class Ellipsies {
     const setup = new ControllerSetup(
       Ellipsies.toFunctions(this.config.controllers),
       this.config.middleware,
+      this.config.cors,
       // this.config.controllers as unknown as Function[],
     );
     Container.set(INTERNAL_HTTP_PORT, this.config.port || DEFAULT_SERVICE_PORT);

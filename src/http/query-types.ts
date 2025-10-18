@@ -56,7 +56,7 @@ export interface IModelController<t extends EllipsiesBaseModel> {
   update: (body: IModelUpdateValues<t>) => Promise<t | t[]>;
   updateOne: (id: number, body: Partial<t>) => Promise<t | null>;
   destroy: (body: FindOptionsWhere<t>) => Promise<t | t[]>;
-  destroyOne: (id: number) => Promise<t | null>;
+  destroyOne: (id: number | UUID) => Promise<t | null>;
   attr: () => Promise<Record<string, IModelAttributes>>;
   sum: (attr: string, req: ExpressRequest) => Promise<ISumType>;
   avg: (attr: string, req: ExpressRequest) => Promise<IAvgType>;
