@@ -14,7 +14,7 @@ import {
   IDataSourceCredentials,
   OverrideOptions,
 } from "@similie/pg-microservice-datasource";
-import { PostgresHostManager } from "../postgres";
+import { PostgresHostManager, SeederService } from "../postgres";
 export const DEFAULT_SERVICE_PORT = 1612;
 export const COMMON_API_SERVICE_ROUTES = "/api/v2/";
 
@@ -56,7 +56,10 @@ export class Ellipsies {
     db: IDataSourceCredentials,
     options?: OverrideOptions,
   ) {
-    return this._postgresManager.init(this.config.models, db, options);
+    await this._postgresManager.init(this.config.models, db, options);
+    // Run seeder once DB is initialized
+    const seeder = new SeederService();
+    return await seeder.run();
   }
   /**
    * @static
