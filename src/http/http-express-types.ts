@@ -1,10 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-
-// export namespace SimilieHTTP {
-export interface ExpressRequest extends Request {
+export type ExpressRequest = Request & {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   user?: any;
-}
+};
 export type ExpressResponse = Response & { locals: any };
 
 export type ExpressNext = NextFunction;
