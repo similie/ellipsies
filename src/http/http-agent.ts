@@ -26,6 +26,8 @@ import {
   IModelUpdateValues,
   UUID,
 } from "@similie/model-connect-entities";
+
+export { IModelUpdateValues, IModelSeekValues };
 // const UUID_ENUM =
 //   "\\d+|[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}";
 export enum ControllerRoutes {

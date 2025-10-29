@@ -4,7 +4,7 @@ import {
   IModelAttributes,
   IModelSeekValues,
   IModelUpdateValues,
-  ISumType,
+  ISumType as _ISumType,
   UUID as _UUID,
   IDValue as _IDValue,
   IEntity,
@@ -19,6 +19,9 @@ import {
 } from "../postgres";
 export type UUID = _UUID;
 export type IDValue = _IDValue;
+export { IModelAttributes, IModelSeekValues };
+
+export type ISumType = _ISumType;
 
 export type EllipsiesBaseModel = IEntity;
 

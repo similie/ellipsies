@@ -50,6 +50,8 @@ import {
   Or,
 } from "../postgres";
 
+export { IAvgType, IModelAttributes, IModelSeekValues, getId };
+
 @Service({ transient: true })
 export class QueryAgent<t extends IModelValues> {
   public query: RequestQuery<t>;

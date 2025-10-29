@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import {
   RoutingControllersOptions,
-  createExpressServer,
   useContainer,
   useExpressServer,
 } from "routing-controllers";
@@ -12,7 +11,6 @@ import { LogProfile } from "@similie/shared-microservice-utils";
 import cors from "cors";
 import { Server } from "http";
 import { INTERNAL_SERVICE_PORTS } from "./query-types";
-import { Readable } from "stream";
 
 export const CONTROLLER_SETUP_VALUE = "CONTROLLER_SETUP_CONTENT_NAME";
 export const INTERNAL_HTTP_PORT = "INTERNAL_HTTP_PORT_VALUE";
