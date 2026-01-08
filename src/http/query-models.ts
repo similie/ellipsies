@@ -30,6 +30,35 @@ export abstract class EllipsiesDateModel extends BaseEntity {
   }
 }
 
+export abstract class EllipsiesDateModelLegacy extends BaseEntity {
+  @CreateDateColumn()
+  @Column("timestamp with time zone", { name: "createdAt" })
+  public createdAt: Date;
+
+  @UpdateDateColumn()
+  @Column("timestamp with time zone", { name: "updatedAt" })
+  public updatedAt: Date;
+
+  @BeforeInsert()
+  public setCreatedAt() {
+    this.createdAt = new Date();
+    this.updatedAt = this.createdAt;
+  }
+
+  @BeforeUpdate()
+  public setUpdatedAt() {
+    this.updatedAt = new Date();
+  }
+}
+
+export abstract class EllipsiesBaseModelLegacy
+  extends EllipsiesDateModelLegacy
+  implements EllipsiesBaseModel
+{
+  @PrimaryGeneratedColumn({ type: "integer", name: "id" })
+  public id: number;
+}
+
 export abstract class EllipsiesBaseModelID
   extends EllipsiesDateModel
   implements EllipsiesBaseModel
