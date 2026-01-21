@@ -195,7 +195,10 @@ export abstract class EllipsiesController<t extends IModelValues>
    * @param {Partial<IModelValues>} body
    * @returns {Promise<IModelValues>}
    */
-  public async updateOne(id: number, body: Partial<t>): Promise<t | null> {
+  public async updateOne(
+    id: number | UUID,
+    body: Partial<t>,
+  ): Promise<t | null> {
     try {
       this.checkWhitelist(ControllerFunctionNames.UPDATE_ONE);
       const agent = new QueryAgent<t>(this.target, { where: { id } });
